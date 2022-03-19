@@ -15,7 +15,7 @@
         </svg>
       </a>
     </div>
-    <div class="mt-8 md:mt-0 md:order-1">
+    <div class="mt-2 md:mt-0 md:order-1">
       <p class="text-center text-base leading-7 text-white">
         Created by <a href="mailto:rob@brooklynhacker.com">Rob Spectre.</a>
         Made with ❤️  in New York.
