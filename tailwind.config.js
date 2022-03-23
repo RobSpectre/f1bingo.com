@@ -3,10 +3,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        green: '#00bc70',
+        green: '#6ed670',
         blue: '#00b1e1',
-        orange: '#f36c3f',
-        darkgray: '#5b6670'
+        orange: '#ce2d11',
+        yellow: '#fec20b',
+        darkgray: '#12131c',
+        gray: '#414141',
+        red: '#1f0202A'
       }
     }
   }

@@ -1,12 +1,9 @@
 <template lang="pug">
 #board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-10.mx-auto
-  div(v-for='cell in board' :key='cell.id' @click.prevent='markSquare(cell.id)')
-    .bg-green.m-auto.text-white.flex.items-center.justify-center(v-if='cell.selected' class="sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 w-16 h-16 text-xs p-4 md:text-base lg:text-lg" :id="'square-' + cell.id")
+  div(v-for='cell in game.board' :key='cell.id' @click.prevent='markSquare(cell.id)')
+    a.m-auto.text-white.flex.items-center.justify-center(class="sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 w-16 h-16 text-xs p-4 md:text-base lg:text-lg hover:bg-yellow focus:outline-none focus:shadow-outline-none focus:border-none" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
       span.inline-block.p-2 {{ cell.text }}
-    a(v-else href='#')
-      .bg-gray-500.m-auto.text-white.flex.items-center.justify-center(class="hover:bg-orange focus:outline-none focus:shadow-outline-orange focus:border-orange active:bg-orange sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 w-16 h-16 text-xs p-4 md:text-base lg:text-lg" :id="'square-' + cell.id")
-        span.inline-block.p-2 {{ cell.text }}
-  winner-card(:selectedSquares='selectedSquares', :winConditionMet='winConditionMet')
+  winner-card(:selectedSquares='game.selectedSquares', :winConditionMet='winConditionMet')
 </template>
 
 <script>
@@ -14,15 +11,17 @@ import cards from '@/assets/data/deck.json'
 
 import WinnerCard from '@/components/WinnerCard.vue'
 
+import { boardStore } from '@/store/board'
+
 export default {
   name: 'Board',
   components: {
     WinnerCard
   },
-  data: function () {
-    return {
-      board: []
-    }
+  setup() {
+    const game = boardStore()
+
+    return { game }
   },
   mounted () {
     this.loadBoard()
@@ -32,14 +31,6 @@ export default {
     })
   },
   computed: {
-    selectedSquares () {
-      return this.board.filter(function (square) {
-        return square.selected == true
-      })
-    },
-    selectedSquaresIds () {
-      return this.selectedSquares.map( x => x.id)
-    },
     winConditionMet () {
       const winConditions = [
         [1, 2, 3, 4, 5],
@@ -55,12 +46,12 @@ export default {
         [1, 7, 13, 19, 25],
         [5, 9, 13, 17, 21]
       ]
-        
+
       for (let i = 0; i < winConditions.length; i++) {
         let winningSquares = 0
 
-        for (let n = 0; n < this.selectedSquaresIds.length; n++) {
-          if ( winConditions[i].includes(this.selectedSquaresIds[n]) === true) {
+        for (let n = 0; n < this.game.selectedSquaresIds.length; n++) {
+          if ( winConditions[i].includes(this.game.selectedSquaresIds[n]) === true) {
             winningSquares++
           }
         }
@@ -75,15 +66,11 @@ export default {
   },
   methods: {
     markSquare (id) {
-      this.board.forEach((cell) => {
-        if (cell.id === id) {
-          cell.selected = true
+      this.game.markSquare(id)
 
-          this.$gtag.event('Click', {
-            event_category: 'Gameplay',
-            event_label: cell.text
-          })
-        }
+      this.$gtag.event('Click', {
+        event_category: 'Gameplay',
+        event_label: this.game.getSquareById(id).text
       })
 
       return id
@@ -103,7 +90,7 @@ export default {
         id++
       }
 
-      this.board = newBoard
+      this.game.resetBoard(newBoard)
     },
     shuffle (array) {
       let currentIndex = array.length
