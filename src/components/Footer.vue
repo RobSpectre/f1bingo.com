@@ -1,5 +1,5 @@
 <template>
-<div class="bg-green rounded-b-lg">
+<div class="bg-gray rounded-b-lg">
   <div class="max-w-screen-xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
     <div class="flex justify-center md:order-2">
       <a href="https://twitter.com/dn0t" class="ml-6 text-white hover:text-white">
