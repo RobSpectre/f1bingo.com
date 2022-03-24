@@ -20,3 +20,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+body {
+  @apply bg-darkgray;
+}
+</style>
