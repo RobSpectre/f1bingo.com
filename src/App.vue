@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="scss">
-body {
+html, body {
   @apply bg-darkgray;
 }
 </style>

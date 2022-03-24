@@ -1,6 +1,6 @@
 <template lang="pug">
 .flex.flex-col.mt-5.justify-center.items-center(class='sm:mt-6')
-  button.inline-flex.rounded-md.border.border-transparent.shadow-sm.px-4.py-2.bg-green.text-base.font-medium.text-white.uppercase.mt-14(type='button' class='hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow sm:text-sm sm:mt-24' @click='shareBoard()') {{ text }} 
+  button.inline-flex.rounded-md.border.border-transparent.shadow-sm.px-4.py-2.bg-green.text-base.font-medium.text-white.uppercase.mt-14(type='button' class='hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow' @click='shareBoard()') {{ text }} 
     ShareIcon.ml-2.h-4.w-4.text-white
 </template>
 
