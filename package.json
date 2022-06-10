@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && echo 'f1bingo.com' > dist/CNAME",
     "preview": "vite preview",
-    "deploy": "echo 'f1bingo.com' > dist/CNAME && git subtree push --prefix dist origin gh-pages"
+    "deploy": "git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
