@@ -1,7 +1,7 @@
 <template lang="pug">
 #board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-10.mx-auto
   div(v-for='cell in game.board' :key='cell.id' @click.prevent='markSquare(cell.id)')
-    a.m-auto.text-white.flex.items-center.justify-center(class="sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 w-16 h-16 text-xs p-4 md:text-base lg:text-lg hover:bg-yellow focus:outline-none focus:shadow-outline-none focus:border-none" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
+    a.m-auto.text-white.flex.items-center.justify-center(class="w-16 h-16 p-4 text-xs sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 md:text-base lg:text-lg focus:outline-none focus:shadow-outline-none focus:border-none" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
       span.inline-block.p-2 {{ cell.text }}
   winner-card(:selectedSquares='game.selectedSquares', :winConditionMet='winConditionMet')
 </template>
@@ -57,6 +57,8 @@ export default {
         }
 
         if (winningSquares === 5) {
+          this.playVictoryMusic()
+
           return true
         }
       }
@@ -107,6 +109,11 @@ export default {
       }
 
       return array
+    },
+    playVictoryMusic () {
+      const audio = new Audio('/sounds/les_toreadors.mp3')
+      audio.volume = 0.5
+      audio.play()
     }
   }
 }
