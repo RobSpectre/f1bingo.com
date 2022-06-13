@@ -1,6 +1,6 @@
 <template lang="pug">
 .fixed.z-10.inset-0.overflow-y-auto(v-if='winConditionMet' aria-labelledby='modal-title' role='dialog' aria-modal='true')
-  .flex.items-end.justify-center.min-h-screen.pt-4.px-4.pb-20.text-center(class='sm:block sm:p-0')
+  .flex.items-center.justify-center.min-h-screen.pt-4.px-4.pb-20.text-center(class='sm:block sm:p-0')
     //
       Background overlay, show/hide based on modal state.
       Entering: "ease-out duration-300"
@@ -28,8 +28,6 @@
 <script>
 import ShareButton from '@/components/ShareButton.vue'
 
-import victorySong from '@/assets/sounds/les_toreadors.mp3'
-
 export default {
   name: 'WinnerCard',
   components: {
@@ -38,20 +36,6 @@ export default {
   props: { 
     selectedSquares: Array,
     winConditionMet: Boolean
-  },
-  computed: {
-    playMusic () {
-      if (this.winConditionMet === true) {
-        this.playVictoryMusic()
-      }
-    }
-  },
-  methods: {
-    playVictoryMusic () {
-      const audio = new Audio(victorySong)
-      audio.volume = 0.5
-      audio.play()
-    }
   }
 }
 </script>
