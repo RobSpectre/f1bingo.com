@@ -21,7 +21,7 @@
   "Outside hairpin overtake",
   "Stuck in grass",
   "Unsafe rejoin",
-  "Turn 2 collision",
+  "Turn 1 collision",
   "Brake fire",
   "Pit jack fail",
   "<2.5 sec pit stop",
@@ -29,8 +29,9 @@
   "Wall of Champions tap",
   "DRS train",
   "Alonso sends it",
-  "Leclerc >7 overtakes",
+  "Leclerc >13 overtakes",
   "Alonso traffic jam",
   "Turn 6 sbinalla",
-  "Yuki radio f-bomb"
+  "Yuki radio f-bomb",
+  "K-mag divebomb"
 ]
