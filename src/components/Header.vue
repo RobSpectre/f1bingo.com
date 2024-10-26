@@ -21,8 +21,8 @@ export default {
       this.emitter.emit('reset-board', {})
 
       this.$gtag.event('Click', {
-        event_category: 'Reset',
-        event_label: 'Board'
+        event_category: 'UX',
+        event_label: 'Reset'
       })
     }
   }

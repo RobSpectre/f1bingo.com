@@ -69,6 +69,11 @@ export default {
         {toastClassName: "bg-green"}
       )
 
+      this.$gtag.event('Click', {
+        event_category: 'UX',
+        event_label: 'Share Board'
+      })
+
       return text
     }
   }

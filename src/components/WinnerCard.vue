@@ -43,12 +43,12 @@ export default {
   },
   methods: {
     closeWinnerCard () {
-      return this.$emit('closeWinnerCard')
-
       this.$gtag.event('Click', {
         event_category: 'UX',
         event_label: 'closeWinnerCard'
       })
+
+      return this.$emit('closeWinnerCard')
     }
   }
 }
