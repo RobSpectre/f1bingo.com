@@ -3,7 +3,12 @@
   div(v-for='cell in game.board' :key='cell.id' @click.prevent='markSquare(cell.id)')
     a.m-auto.text-white.flex.items-center.justify-center(class="w-16 h-16 p-4 text-xs sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 md:text-base lg:text-lg focus:outline-none focus:shadow-outline-none focus:border-none" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
       span.celltext {{ cell.text }}
-  winner-card(:selectedSquares='game.selectedSquares', :winConditionMet='winConditionMet')
+  winner-card(
+    :selectedSquares='game.selectedSquares',
+    :winConditionMet='winConditionMet',
+    :winnerCardClosed='winnerCardClosed',
+    @closeWinnerCard='winnerCardClosed = true'
+  )
 </template>
 
 <script>
@@ -59,11 +64,21 @@ export default {
         if (winningSquares === 5) {
           this.playVictoryMusic()
 
+          this.$gtag.event('Click', {
+            event_category: 'Gameplay',
+            event_label: 'BINGO' 
+          })
+
           return true
         }
       }
 
       return false
+    }
+  },
+  data () {
+    return {
+      winnerCardClosed: false
     }
   },
   methods: {
