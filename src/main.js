@@ -4,6 +4,7 @@ import mitt from 'mitt'
 import { createPinia } from 'pinia'
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 
@@ -17,7 +18,9 @@ app.use(VueGtag, {
   config: { id: 'G-9DH48XP22E' }
 })
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 
 app.config.globalProperties.emitter = emitter
 
