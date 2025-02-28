@@ -99,7 +99,7 @@ export default {
 
       for (let i = 0; i < 25; i++) {
         if (i === 12) {
-          newBoard.push({ id: id, text: 'Green Flag (Free)', selected: true })
+          newBoard.push({ id: id, text: 'Lights Out! (Free)', selected: true })
         } else {
           newBoard.push({ id: id, text: deck[id], selected: false })
         }
@@ -135,16 +135,16 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fire+Sans+Condensed:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400&display=swap');
 
 .celltext {
-  font-family: 'Fira Sans Condensed', sans-serif;
+  font-family: 'Instrument Sans', sans-serif;
   @apply text-pretty inline-block;
 }
 
 .square {
-  @apply p-4 leading-4 tracking-tight text-xs md:text-base lg:text-xl
-  xl:text-3xl 2xl:text-5xl text-balance truncate focus:outline-none 
+  @apply p-4 leading-4 tracking-tight text-xs md:text-lg lg:text-2xl
+  xl:text-4xl 2xl:text-5xl text-balance truncate focus:outline-none 
   focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2;
 }
 </style>
