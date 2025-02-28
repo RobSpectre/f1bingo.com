@@ -1,7 +1,7 @@
 <template lang="pug">
-#board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-10.mx-auto
+#board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-4.flex.items-center.justify-center
   div(v-for='cell in game.board' :key='cell.id' @click.prevent='markSquare(cell.id)')
-    a.m-auto.text-white.flex.items-center.justify-center(class="w-16 h-16 p-4 text-xs sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 md:text-base lg:text-lg focus:outline-none focus:shadow-outline-none focus:border-none" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
+    button.aspect-square.w-full.h-full.text-white.flex.items-center.justify-center.square(class="" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
       span.celltext {{ cell.text }}
   winner-card(
     :selectedSquares='game.selectedSquares',
@@ -135,10 +135,16 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fire+Sans+Condensed:wght@400&display=swap');
 
 .celltext {
-  font-family: 'Roboto Condensed', sans-serif;
-  @apply inline-block p-2;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  @apply text-pretty inline-block;
+}
+
+.square {
+  @apply p-4 leading-4 tracking-tight text-xs md:text-base lg:text-xl
+  xl:text-3xl 2xl:text-5xl text-balance truncate focus:outline-none 
+  focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2;
 }
 </style>

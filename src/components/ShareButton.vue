@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ShareIcon } from '@heroicons/vue/solid'
+import { ShareIcon } from '@heroicons/vue/24/solid'
 
 import { useToast } from 'vue-toastification'
 

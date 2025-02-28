@@ -9,7 +9,8 @@ module.exports = {
         yellow: '#fec20b',
         darkgray: '#12131c',
         gray: '#414141',
-        red: '#1f0202A'
+        red: '#1f0202',
+        'focus-blue': '#3490dc'
       }
     }
   }
