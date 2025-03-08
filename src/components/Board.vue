@@ -143,8 +143,8 @@ export default {
 }
 
 .square {
-  @apply p-4 leading-4 tracking-tight text-xs md:text-lg lg:text-2xl
-  xl:text-4xl 2xl:text-5xl text-balance truncate focus:outline-none 
+  @apply p-4 leading-4 tracking-tight text-xs sm:text-base md:text-lg
+  text-balance truncate focus:outline-none 
   focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2;
 }
 </style>

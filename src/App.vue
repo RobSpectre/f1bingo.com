@@ -1,6 +1,6 @@
 <template lang="pug">
 div#app.bg-darkgray.py-4
-  div.container.mx-auto
+  div.container.mx-auto.max-w-screen-md
     Header
     Board
     Footer
