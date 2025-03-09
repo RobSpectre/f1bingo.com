@@ -29,7 +29,12 @@ export default {
     return { game }
   },
   mounted () {
-    this.loadBoard()
+    console.log(this.game.event)
+    console.log(cards.event)
+
+    if (this.game.event !== cards.event) {
+      this.loadBoard()
+    }
 
     this.emitter.on('reset-board', (payload) => {
       this.loadBoard()
@@ -93,7 +98,7 @@ export default {
       return id
     },
     loadBoard () {
-      const deck = this.shuffle(cards)
+      const deck = this.shuffle(cards.squares)
       let id = 1
       const newBoard = []
 
@@ -107,6 +112,7 @@ export default {
         id++
       }
 
+      this.game.setEvent(cards.event)
       this.game.resetBoard(newBoard)
     },
     shuffle (array) {

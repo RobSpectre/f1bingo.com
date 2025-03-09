@@ -3,8 +3,10 @@ import { defineStore } from 'pinia'
 export const boardStore = defineStore('game', {
   state: () => ({
     name: 'game',
-    board: []
+    board: [],
+    event: null
   }),
+  persist: true,
   getters: {
     selectedSquares (state) {
       return state.board.filter(function (square) {
@@ -35,6 +37,9 @@ export const boardStore = defineStore('game', {
     },
     resetBoard (board) {
       this.board = board
+    },
+    setEvent (title) {
+      this.event = title
     }
   }
 })
