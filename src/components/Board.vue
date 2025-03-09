@@ -1,7 +1,7 @@
 <template lang="pug">
 #board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-4.flex.items-center.justify-center
   div(v-for='cell in game.board' :key='cell.id' @click.prevent='markSquare(cell.id)')
-    button.aspect-square.w-full.h-full.text-white.flex.items-center.justify-center.square(class="" :class="{ 'bg-green': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
+    button.aspect-square.w-full.h-full.text-white.flex.items-center.justify-center.square(class="" :class="{ 'bg-blue': cell.selected, 'bg-gray': !cell.selected }" :id="'square-' + cell.id")
       span.celltext {{ cell.text }}
   winner-card(
     :selectedSquares='game.selectedSquares',

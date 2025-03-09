@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import html2canvas from 'html2canvas'
+
 import { ShareIcon } from '@heroicons/vue/24/solid'
 
 import { useToast } from 'vue-toastification'
@@ -27,54 +29,78 @@ export default {
     text: String
   },
   methods: {
-    shareBoard () {
-      let text = "f1bingo.com\n\n"
-
-      let results = [
-        [],
-        [],
-        [],
-        [],
-        []
-      ]
+    async shareBoard() {
+      try {
+        // Find the app element to screenshot
+        const appElement = document.getElementById('app');
         
-      let row = 0
-      
-      this.game.board.forEach((cell) => {
-        if (cell.selected === true) {
-          results[row].push("🟩")
-        } else {
-          results[row].push("⬜")
-        }
+        // Create a deep clone of the app element
+        const clonedApp = appElement.cloneNode(true);
         
-        row++
-
-        if (row > 4) {
-          row = 0
-        }
-      })
-
-      results.forEach((row) => {
-        row.forEach((square) => {
-          text = text + square
-        })
+        // Apply styling to make it invisible but rendered
+        clonedApp.style.position = 'absolute';
+        clonedApp.style.top = '-9999px';
+        clonedApp.style.left = '-9999px';
+        clonedApp.style.width = appElement.offsetWidth + 'px';
+        clonedApp.style.height = appElement.offsetHeight + 'px';
         
-        text = text + "\n"
-      })
+        // Append the clone to body
+        document.body.appendChild(clonedApp);
+        
+        // Remove no-capture elements from the clone
+        const elementsToRemove = clonedApp.querySelectorAll('.no-capture');
+        elementsToRemove.forEach(el => {
+          el.remove();
+        });
 
-      navigator.clipboard.writeText(text)
-
-      this.toast(
-        "Results copied to your clipboard",
-        {toastClassName: "bg-green"}
-      )
-
-      this.$gtag.event('Click', {
-        event_category: 'UX',
-        event_label: 'Share Board'
-      })
-
-      return text
+        const footerText = clonedApp.querySelector('.change-for-screenshot')
+        const originalFooterText = footerText.innerHTML
+        footerText.innerHTML = "Play along at f1bingo.com"
+        footerText.classList.remove('inter')
+        footerText.classList.add('banner')
+        
+        // Set screenshot options for better quality
+        const options = {
+          scale: 2,
+          logging: false,
+          useCORS: true,
+          backgroundColor: null
+        };
+        
+        // Capture screenshot of the clone
+        const canvas = await html2canvas(clonedApp, options);
+        
+        // Remove the clone from the DOM
+        document.body.removeChild(clonedApp);
+        
+        // Convert to image data
+        const imageData = canvas.toDataURL('image/png');
+        
+        // Create a blob for clipboard API
+        const res = await fetch(imageData);
+        const blob = await res.blob();
+        
+        // Copy to clipboard
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            [blob.type]: blob
+          })
+        ]);
+        
+        // Notify user
+        this.toast(
+          "Board copied to your clipboard!",
+          {toastClassName: "bg-green"}
+        )
+        
+        return true;
+      } catch (error) {
+        console.error('Screenshot sharing failed:', error);
+        this.toast(
+          `Error copying to clipboard ${error}`,
+          {toastClassName: "bg-red"}
+        )
+      }
     }
   }
 }

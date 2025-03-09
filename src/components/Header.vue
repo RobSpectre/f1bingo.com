@@ -1,10 +1,10 @@
 <template lang="pug">
 #header.bg-cover.bg-no-repeat.bg-left.flex.h-48.relative
   h1.flex-auto.text-center.text-6xl.text-white.hidden Formula 1 Bingo
-  span.flex-initial.absolute.right-0.bottom-0.mb-4.mr-24
+  span.flex-initial.absolute.right-0.bottom-0.mb-4.mr-24.no-capture
     ShareButton(text="Share")
   span.ml-3.shadow-sm.rounded-md.flex-initial.absolute.right-0.bottom-0.mb-4.mr-2
-    button.inline-flex.items-center.p-2.border.border-transparent.text-large.leading-5.font-medium.rounded-md.text-white.bg-orange.transition.duration-150.ease-in-out.uppercase(type='button' class='hover:bg-yellow focus:outline-none' @click='resetBoard()')
+    button.inline-flex.items-center.p-2.border.border-transparent.text-large.leading-5.font-medium.rounded-md.text-white.bg-orange.transition.duration-150.ease-in-out.uppercase.no-capture(type='button' class='hover:bg-yellow focus:outline-none' @click='resetBoard()')
       | Reset
 </template>
 

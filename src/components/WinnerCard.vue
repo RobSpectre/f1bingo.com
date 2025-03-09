@@ -1,5 +1,5 @@
 <template lang="pug">
-.fixed.z-10.inset-0.overflow-y-auto(v-if='winConditionMet & !winnerCardClosed' aria-labelledby='modal-title' role='dialog' aria-modal='true')
+.fixed.z-10.inset-0.overflow-y-auto.no-capture(v-if='winConditionMet & !winnerCardClosed' aria-labelledby='modal-title' role='dialog' aria-modal='true')
   .flex.items-center.justify-center.min-h-screen.pt-4.px-4.pb-20.text-center(class='sm:block sm:p-0')
     //
       Background overlay, show/hide based on modal state.

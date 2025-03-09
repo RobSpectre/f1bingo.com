@@ -25,6 +25,6 @@ export default {
 
 .banner {
   font-family: 'Banner', serif;
-  @apply text-center p-3 text-white text-xs md:text-sm lg:text-base;
+  @apply uppercase text-center p-3 text-white text-xs md:text-sm lg:text-base;
 }
 </style>
