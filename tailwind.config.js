@@ -10,7 +10,8 @@ module.exports = {
         darkgray: '#12131c',
         gray: '#414141',
         red: '#1f0202',
-        'focus-blue': '#3490dc'
+        'focus-blue': '#3490dc',
+        lightgray: '#38383f'
       }
     }
   }
