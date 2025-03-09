@@ -90,12 +90,14 @@ export default {
         const blob = await res.blob();
         
         // Copy to clipboard
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            [blob.type]: blob
-          })
-        ]);
-        
+        setTimeout(() => {
+          navigator.clipboard.write([
+            new ClipboardItem({
+              [blob.type]: blob
+            })
+          ])
+        }, 0)
+
         // Notify user
         this.toast(
           "Board copied to your clipboard!",
