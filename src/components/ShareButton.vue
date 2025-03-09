@@ -41,8 +41,8 @@ export default {
         clonedApp.style.position = 'absolute';
         clonedApp.style.top = '-9999px';
         clonedApp.style.left = '-9999px';
-        clonedApp.style.width = appElement.offsetWidth + 'px';
-        clonedApp.style.height = appElement.offsetHeight + 'px';
+        clonedApp.style.width = '643px' 
+        clonedApp.style.height = '1050px'
         
         // Append the clone to body
         document.body.appendChild(clonedApp);
@@ -58,13 +58,22 @@ export default {
         footerText.innerHTML = "Play along at f1bingo.com"
         footerText.classList.remove('inter')
         footerText.classList.add('banner')
+
+        const cellTexts = clonedApp.querySelectorAll('.celltext')
+
+        cellTexts.forEach(el => {
+          el.classList.remove('my-0', 'mx-2', 'inline-block')
+          el.style.fontSize = '1.2rem'
+          el.style.lineHeight = '1.3rem'
+          el.style.verticalAlign = 'middle'
+          el.style.display = 'inline'
+        })
         
         // Set screenshot options for better quality
         const options = {
-          scale: 2,
           logging: false,
           useCORS: true,
-          backgroundColor: null
+          backgroundColor: null,
         };
         
         // Capture screenshot of the clone

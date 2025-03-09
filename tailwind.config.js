@@ -12,6 +12,14 @@ module.exports = {
         red: '#aa0007',
         'focus-blue': '#3490dc',
         lightgray: '#38383f'
+      },
+      fontSize: {
+        'xxs': [
+          '0.65rem', {
+            lineHeight: '0.4rem',
+            letterSpacing: '-0.02em'
+          }
+        ]
       }
     }
   }
