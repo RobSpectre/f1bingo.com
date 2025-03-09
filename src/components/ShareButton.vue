@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas-pro'
 
 import { ShareIcon } from '@heroicons/vue/24/solid'
 
