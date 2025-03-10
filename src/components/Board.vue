@@ -29,9 +29,6 @@ export default {
     return { game }
   },
   mounted () {
-    console.log(this.game.event)
-    console.log(cards.event)
-
     if (this.game.event !== cards.event) {
       this.loadBoard()
     }
