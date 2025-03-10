@@ -149,7 +149,7 @@ export default {
 }
 
 .square {
-  @apply tracking-tight text-xxs sm:text-base md:text-lg
+  @apply tracking-tight text-xs sm:text-base md:text-lg
   text-balance truncate focus:outline-none leading-3 
   focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2;
 }

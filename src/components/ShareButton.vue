@@ -83,27 +83,28 @@ export default {
         document.body.removeChild(clonedApp);
         
         // Convert to image data
-        const imageData = canvas.toDataURL('image/png');
-        
-        // Create a blob for clipboard API
-        const res = await fetch(imageData);
-        const blob = await res.blob();
-        
-        // Copy to clipboard
-        setTimeout(() => {
-          navigator.clipboard.write([
-            new ClipboardItem({
-              [blob.type]: blob
-            })
-          ])
-        }, 0)
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            console.error('Failed to create blob from canvas.');
+            this.toast('Error creating image data.', { toastClassName: 'bg-red' });
+            return;
+          }
 
-        // Notify user
-        this.toast(
-          "Board copied to your clipboard!",
-          {toastClassName: "bg-green"}
-        )
-        
+          try {
+            await navigator.clipboard.write([
+              new ClipboardItem({
+                'image/png': blob
+              })
+            ]);
+
+            this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
+            console.log('Screenshot copied to clipboard successfully!'); // Success log
+          } catch (clipboardError) {
+            console.error('Clipboard write failed:', clipboardError); // Detailed error log
+            this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
+          }
+        }, 'image/png')
+
         return true;
       } catch (error) {
         console.error('Screenshot sharing failed:', error);
