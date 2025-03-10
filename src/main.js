@@ -19,12 +19,12 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 
-app.use(VueGtag, {
-  config: { id: 'G-9DH48XP22E' }
-})
-
 app.config.globalProperties.emitter = emitter
 
 app.use(Toast, {})
+
+app.use(VueGtag, {
+  config: { id: 'G-9DH48XP22E' }
+})
 
 app.mount('#app')
