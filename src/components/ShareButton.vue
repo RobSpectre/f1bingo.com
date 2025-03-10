@@ -28,6 +28,15 @@ export default {
   props: {
     text: String
   },
+  mounted () {
+    document.addEventListener('clickShare', async function(e) {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': e.blob
+        })
+      ])
+    })
+  },
   methods: {
     async shareBoard() {
       try {
@@ -91,11 +100,8 @@ export default {
           }
 
           try {
-            await navigator.clipboard.write([
-              new ClipboardItem({
-                'image/png': blob
-              })
-            ]);
+            const event = new CustomEvent('clickShare', { blob: blob} )
+            document.dispatchEvent(event)
 
             this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
             console.log('Screenshot copied to clipboard successfully!'); // Success log
