@@ -12,8 +12,11 @@ import '@/assets/styles/theme.scss'
 
 const app = createApp(App)
 
-const emitter = mitt()
+app.use(VueGtag, {
+  config: { id: 'G-9DH48XP22E' }
+})
 
+const emitter = mitt()
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
@@ -22,9 +25,5 @@ app.use(pinia)
 app.config.globalProperties.emitter = emitter
 
 app.use(Toast, {})
-
-app.use(VueGtag, {
-  config: { id: 'G-9DH48XP22E' }
-})
 
 app.mount('#app')
