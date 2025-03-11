@@ -40,12 +40,23 @@ export default {
             files: [file]
           });
 
-          this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
+          this.$gtag.event('Click', {
+            event_category: 'Share',
+            event_label: 'Share Success'
+          })
         } catch (error) {
           this.toast(`Error sharing your board: ${error.message}`, { toastClassName: "bg-red" });
         }
+          this.$gtag.event('Click', {
+            event_category: 'Share',
+            event_label: 'Share Failure'
+          })
       } else {
         this.toast('Web Share API not supported in this browser', { toastClassName: "bg-red" });
+        this.$gtag.event('Click', {
+          event_category: 'Share',
+          event_label: 'Share Failure'
+        })
       }
     })
   },
@@ -145,9 +156,18 @@ export default {
 
               this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
               console.log('Screenshot copied to clipboard successfully!'); // Success log
+              this.$gtag.event('Click', {
+                event_category: 'Share',
+                event_label: 'Share Success'
+              })
             } catch(clipboardError) {
               console.error('Clipboard write failed:', clipboardError); // Detailed error log
               this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
+
+              this.$gtag.event('Click', {
+                event_category: 'Share',
+                event_label: 'Share Failure'
+              })
             }
           }
         }, 'image/png')
