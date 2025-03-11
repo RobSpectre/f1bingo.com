@@ -29,15 +29,42 @@ export default {
     text: String
   },
   mounted () {
-    document.addEventListener('clickShare', async function(e) {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'image/png': e.detail
-        })
-      ])
+    document.addEventListener('clickShare', async (e) => {
+      const file = new File([e.detail], 'image.png', { type: 'image/png' });
+      
+      if (navigator.canShare()) {
+        try {
+          await navigator.share({
+            title: 'f1bingo.com',
+            text: 'Share your board!',
+            files: [file]
+          });
+
+          this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
+        } catch (error) {
+          this.toast(`Error sharing your board: ${error.message}`, { toastClassName: "bg-red" });
+        }
+      } else {
+        this.toast('Web Share API not supported in this browser', { toastClassName: "bg-red" });
+      }
     })
   },
   methods: {
+    isIOS() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      
+      // Check for iOS devices: iPhone, iPad, iPod
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return true;
+      }
+      
+      // Additional check for iOS 13+ iPad which uses desktop user-agent
+      if (/Macintosh/.test(userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {
+        return true;
+      }
+      
+      return false;
+    },
     async shareBoard() {
       try {
         // Find the app element to screenshot
@@ -98,16 +125,30 @@ export default {
             this.toast('Error creating image data.', { toastClassName: 'bg-red' });
             return;
           }
+          
+          if (this.isIOS()) {
+            try {
+              const event = new CustomEvent('clickShare', { detail: blob } )
+              document.dispatchEvent(event)
 
-          try {
-            const event = new CustomEvent('clickShare', { detail: blob} )
-            document.dispatchEvent(event)
+            } catch (clipboardError) {
+              console.error('Clipboard write failed:', clipboardError); // Detailed error log
+              this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
+            }
+          } else {
+            try {
+              await navigator.clipboard.write([
+                new ClipboardItem({
+                  'image/png': e.detail
+                })
+              ])
 
-            this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
-            console.log('Screenshot copied to clipboard successfully!'); // Success log
-          } catch (clipboardError) {
-            console.error('Clipboard write failed:', clipboardError); // Detailed error log
-            this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
+              this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
+              console.log('Screenshot copied to clipboard successfully!'); // Success log
+            } catch(clipboardError) {
+              console.error('Clipboard write failed:', clipboardError); // Detailed error log
+              this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
+            }
           }
         }, 'image/png')
 
