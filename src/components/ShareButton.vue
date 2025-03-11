@@ -32,7 +32,7 @@ export default {
     document.addEventListener('clickShare', async (e) => {
       const file = new File([e.detail], 'image.png', { type: 'image/png' });
       
-      if (navigator.canShare()) {
+      if (navigator.share) {
         try {
           await navigator.share({
             title: 'f1bingo.com',
@@ -139,7 +139,7 @@ export default {
             try {
               await navigator.clipboard.write([
                 new ClipboardItem({
-                  'image/png': e.detail
+                  'image/png': blob 
                 })
               ])
 
