@@ -32,7 +32,7 @@ export default {
     document.addEventListener('clickShare', async function(e) {
       await navigator.clipboard.write([
         new ClipboardItem({
-          'image/png': e.blob
+          'image/png': e.detail
         })
       ])
     })
@@ -100,7 +100,7 @@ export default {
           }
 
           try {
-            const event = new CustomEvent('clickShare', { blob: blob} )
+            const event = new CustomEvent('clickShare', { detail: blob} )
             document.dispatchEvent(event)
 
             this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
