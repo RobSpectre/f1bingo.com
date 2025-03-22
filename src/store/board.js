@@ -4,7 +4,8 @@ export const boardStore = defineStore('game', {
   state: () => ({
     name: 'game',
     board: [],
-    event: null
+    event: null,
+    version: null
   }),
   persist: true,
   getters: {
@@ -40,6 +41,9 @@ export const boardStore = defineStore('game', {
     },
     setEvent (title) {
       this.event = title
+    },
+    setVersion (version) {
+      this.version = version
     }
   }
 })

@@ -29,7 +29,7 @@ export default {
     return { game }
   },
   mounted () {
-    if (this.game.event !== cards.event) {
+    if (this.game.event !== cards.event || this.game.version !== cards.version) {
       this.loadBoard()
     }
 
@@ -110,6 +110,7 @@ export default {
       }
 
       this.game.setEvent(cards.event)
+      this.game.setVersion(cards.version)
       this.game.resetBoard(newBoard)
     },
     shuffle (array) {
