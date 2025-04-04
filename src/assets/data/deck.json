@@ -1,6 +1,6 @@
 {
   "event": "Formula 1 Lenovo Japanese Grand Prix",
-  "version": 1,
+  "version": 2,
   "squares": [
     "Car on hat",
     "Wheel contact",
@@ -27,6 +27,6 @@
     "Hairpin overtake",
     "🤡 strategy",
     "Driver overrides engineer",
-    "Pit lane incident"
+    "Grass fire"
   ]
 }
