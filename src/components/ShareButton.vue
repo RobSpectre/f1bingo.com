@@ -32,36 +32,7 @@ export default {
     text: String
   },
   mounted () {
-    document.addEventListener('clickShare', async (e) => {
-      const file = new File([e.detail], 'image.png', { type: 'image/png' });
-      
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: 'f1bingo.com',
-            text: 'Share your board!',
-            files: [file]
-          });
-
-          this.$gtag.event('Click', {
-            event_category: 'Share',
-            event_label: 'Share Success'
-          })
-        } catch (error) {
-          this.toast(`Error sharing your board: ${error.message}`, { toastClassName: "bg-red" });
-        }
-          this.$gtag.event('Click', {
-            event_category: 'Share',
-            event_label: 'Share Failure'
-          })
-      } else {
-        this.toast('Web Share API not supported in this browser', { toastClassName: "bg-red" });
-        this.$gtag.event('Click', {
-          event_category: 'Share',
-          event_label: 'Share Failure'
-        })
-      }
-    })
+    // mounted logic empty, removed clickShare EventListener hack since it breaks Safari user gesture tracking
   },
   methods: {
     isIOS() {
@@ -132,48 +103,71 @@ export default {
         // Remove the clone from the DOM
         document.body.removeChild(clonedApp);
         
-        // Convert to image data
-        canvas.toBlob(async (blob) => {
-          if (!blob) {
-            console.error('Failed to create blob from canvas.');
-            this.toast('Error creating image data.', { toastClassName: 'bg-red' });
-            return;
-          }
+        // Convert to image data using a Promise to preserve the async user-gesture context for iOS Safari
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        
+        if (!blob) {
+          console.error('Failed to create blob from canvas.');
+          this.toast('Error creating image data.', { toastClassName: 'bg-red' });
+          return;
+        }
+        
+        if (this.isIOS()) {
+          const file = new File([blob], 'image.png', { type: 'image/png' });
           
-          if (this.isIOS()) {
+          if (navigator.share) {
             try {
-              const event = new CustomEvent('clickShare', { detail: blob } )
-              document.dispatchEvent(event)
+              if (navigator.canShare && !navigator.canShare({ files: [file] })) {
+                 this.toast('Sharing images is not supported on this browser.', { toastClassName: 'bg-red' });
+                 return;
+              }
+              await navigator.share({
+                title: 'f1bingo.com',
+                text: 'Share your board!',
+                files: [file]
+              });
 
-            } catch (clipboardError) {
-              console.error('Clipboard write failed:', clipboardError); // Detailed error log
-              this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
-            }
-          } else {
-            try {
-              await navigator.clipboard.write([
-                new ClipboardItem({
-                  'image/png': blob 
-                })
-              ])
-
-              this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
-              console.log('Screenshot copied to clipboard successfully!'); // Success log
               this.$gtag.event('Click', {
                 event_category: 'Share',
                 event_label: 'Share Success'
-              })
-            } catch(clipboardError) {
-              console.error('Clipboard write failed:', clipboardError); // Detailed error log
-              this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
-
+              });
+            } catch (error) {
+              // Ignore AbortError which just means the user canceled the share sheet
+              if (error.name !== 'AbortError') {
+                this.toast(`Error sharing your board: ${error.message}`, { toastClassName: "bg-red" });
+              }
               this.$gtag.event('Click', {
                 event_category: 'Share',
                 event_label: 'Share Failure'
-              })
+              });
             }
+          } else {
+            this.toast('Web Share API not supported in this browser', { toastClassName: "bg-red" });
           }
-        }, 'image/png')
+        } else {
+          try {
+            await navigator.clipboard.write([
+              new ClipboardItem({
+                'image/png': blob 
+              })
+            ]);
+
+            this.toast("Board copied to your clipboard!", { toastClassName: "bg-green" });
+            console.log('Screenshot copied to clipboard successfully!');
+            this.$gtag.event('Click', {
+              event_category: 'Share',
+              event_label: 'Share Success'
+            });
+          } catch(clipboardError) {
+            console.error('Clipboard write failed:', clipboardError);
+            this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: "bg-red" });
+
+            this.$gtag.event('Click', {
+              event_category: 'Share',
+              event_label: 'Share Failure'
+            });
+          }
+        }
 
         return true;
       } catch (error) {
