@@ -70,7 +70,7 @@ class Particle {
     this.width = this.baseWidth
     
     this.opacity = 0
-    this.color = '#00f0ff'
+    this.color = '#00a0de' // Wet tire blue
     
     if (initial) {
         this.opacity = Math.random()

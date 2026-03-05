@@ -1,5 +1,5 @@
 <template lang="pug">
-#board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-4.flex.items-center.justify-center
+#board.bg-white.grid.grid-flow-col.grid-cols-5.grid-rows-5.gap-4.p-4.flex.items-center.justify-center.relative
   div(v-for='cell in game.board' :key='cell.id' @click.prevent='markSquare(cell.id)')
     button(
       class="aspect-square w-full h-full text-white flex items-center justify-center square transition-all duration-200 ease-out rounded-2xl shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
@@ -10,7 +10,11 @@
       // Particle overlay for each cell
       .particles-container.absolute.inset-0.pointer-events-none.overflow-hidden(v-if="particles[cell.id]")
         div(v-for="p in particles[cell.id]" :key="p.id" class="particle" :style="p.style")
-  winner-card(
+  
+  // Victory High-intensity particles background overlay
+  particles.absolute.inset-0.w-full.h-full.z-10(v-if="winConditionMet && !winnerCardClosed", :index="0", :intensity="5")
+
+  winner-card.z-20(
     :selectedSquares='game.selectedSquares',
     :winConditionMet='winConditionMet',
     :winnerCardClosed='winnerCardClosed',
@@ -22,13 +26,15 @@
 import cards from '@/assets/data/deck.json'
 
 import WinnerCard from '@/components/WinnerCard.vue'
+import Particles from '@/components/Particles.vue'
 
 import { boardStore } from '@/store/board'
 
 export default {
   name: 'Board',
   components: {
-    WinnerCard
+    WinnerCard,
+    Particles
   },
   setup() {
     const game = boardStore()
