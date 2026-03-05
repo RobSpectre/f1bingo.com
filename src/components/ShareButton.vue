@@ -1,7 +1,10 @@
 <template lang="pug">
-.flex.flex-col.mt-5.justify-center.items-center(class='sm:mt-6')
-  button.inline-flex.rounded-md.border.border-transparent.shadow-sm.px-4.py-2.bg-green.text-base.font-medium.text-white.uppercase.mt-14(type='button' class='hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow sm:text-sm sm:mt-24' @click='shareBoard()') {{ text }} 
-    ShareIcon.ml-2.h-4.w-4.text-white
+button(
+  type='button'
+  class='inline-flex items-center justify-center rounded-full border border-transparent shadow-md px-6 py-3 bg-tire-medium text-base font-medium text-darkgray uppercase transition-all duration-200 ease-out hover:bg-tire-soft hover:text-white hover:-translate-y-1 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tire-soft'
+  @click='shareBoard()'
+) {{ text }} 
+  ShareIcon.ml-2.h-4.w-4.text-darkgray
 </template>
 
 <script>

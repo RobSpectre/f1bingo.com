@@ -3,15 +3,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        green: '#00aa4e',
-        blue: '#00b1e1',
-        orange: '#ce2d11',
-        yellow: '#fec20b',
-        darkgray: '#12131c',
-        gray: '#414141',
-        red: '#aa0007',
-        'focus-blue': '#3490dc',
-        lightgray: '#38383f'
+        'tire-soft': '#ff3333',   // Soft Red
+        'tire-medium': '#ebd324', // Medium Yellow
+        'tire-hard': '#ffffff',   // Hard White
+        'tire-wet': '#00a0de',    // Wet Blue
+        'tire-inters': '#67ac3a', // Inter Green
+        darkgray: '#18181b', // zinc-900 (track black)
+        gray: '#27272a',     // zinc-800
+        'focus-blue': '#0284c7',
+        lightgray: '#3f3f46' // zinc-700
       },
       fontSize: {
         'xxs': [
