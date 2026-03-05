@@ -1,16 +1,25 @@
 <template lang="pug">
-div(v-if='winConditionMet & !winnerCardClosed' class="no-capture absolute z-20 inset-0 overflow-hidden flex items-center justify-center p-4 rounded-xl" aria-labelledby='modal-title' role='dialog' aria-modal='true')
-  //
-    Victory panel, animated using custom CSS classes.
-  div#winner(class='victory-animation bg-cover relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-2xl h-64 w-72 sm:p-6')
-    button.absolute.right-0.top-0.mt-4.mr-4.transition-transform.hover_scale-110.active_scale-95.z-30(@click="closeWinnerCard")
-      svg.w-6.h-6.drop-shadow-md(xmlns="http://www.w3.org/2000/svg", fill="none", viewBox="0 0 24 24", stroke-width="2", stroke="white")
+div(
+  v-if='winConditionMet && !winnerCardClosed'
+  class="winner-modal absolute inset-0 overflow-hidden flex items-center justify-center p-4 rounded-[1rem]"
+  aria-labelledby='modal-title'
+  role='dialog'
+  aria-modal='true'
+)
+  div#winner.surface-strong.winner-panel.no-capture
+    button.winner-panel__close(
+      @click="closeWinnerCard"
+      type='button'
+      aria-label='Close winner modal'
+    )
+      svg.w-5.h-5(xmlns="http://www.w3.org/2000/svg", fill="none", viewBox="0 0 24 24", stroke-width="2", stroke="currentColor")
         path(stroke-linecap="round", stroke-linejoin="round", d="M6 18 18 6M6 6l12 12")
-    
-    div.absolute.inset-x-0.flex.justify-center.z-30(class="top-1/3")
-      ShareButton(text="Share")
+    p.section-label Bingo Achieved
+    h3#modal-title.winner-panel__title Full send.
+    p.winner-panel__copy You hit a complete line. Screenshot the board and post your weekend masterpiece.
+    .winner-panel__actions
+      ShareButton(text="Share Win")
 </template>
-
 
 <script>
 import ShareButton from '@/components/ShareButton.vue'
@@ -20,7 +29,7 @@ export default {
   components: {
     ShareButton
   },
-  props: { 
+  props: {
     selectedSquares: Array,
     winConditionMet: Boolean,
     winnerCardClosed: Boolean
@@ -39,40 +48,74 @@ export default {
 </script>
 
 <style lang="scss">
-#winner {
-  background-image: url('@/assets/winner_graphic.png');
-  background-position: center;
+.winner-modal {
+  z-index: 20;
+  background: rgba(3, 6, 10, 0.68);
+  backdrop-filter: blur(12px);
 }
 
-.victory-animation {
-  animation: 
-    victoryPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
-    victoryPulse 2s ease-in-out 0.6s infinite alternate;
+.winner-panel {
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+  width: min(100%, 28rem);
+  padding: 1.5rem;
+  border-radius: 0.9rem;
+  background:
+    linear-gradient(135deg, rgba(255, 196, 81, 0.16), transparent 35%),
+    linear-gradient(180deg, rgba(10, 16, 24, 0.96), rgba(10, 12, 18, 0.98));
+  animation:
+    victoryPopIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards,
+    victoryPulse 2s ease-in-out 0.55s infinite alternate;
+}
+
+.winner-panel__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.winner-panel__title {
+  font-size: clamp(2.2rem, 7vw, 3rem);
+  line-height: 0.9;
+}
+
+.winner-panel__copy {
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.winner-panel__actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.2rem;
 }
 
 @keyframes victoryPopIn {
   0% {
     opacity: 0;
-    transform: scale(0.3) rotate(-10deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05) rotate(3deg);
+    transform: translateY(12px) scale(0.92);
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: translateY(0) scale(1);
   }
 }
 
 @keyframes victoryPulse {
   0% {
-    box-shadow: 0 0 15px 5px rgba(0, 160, 222, 0.4); /* wet tire blue glow */
-    transform: scale(1);
+    box-shadow: 0 0 0 1px rgba(255, 196, 81, 0.08), 0 25px 60px rgba(0, 0, 0, 0.38);
   }
   100% {
-    box-shadow: 0 0 30px 15px rgba(0, 160, 222, 0.8);
-    transform: scale(1.02);
+    box-shadow: 0 0 0 1px rgba(255, 196, 81, 0.22), 0 30px 75px rgba(255, 91, 77, 0.22);
   }
 }
 </style>

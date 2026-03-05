@@ -5,7 +5,8 @@ export const boardStore = defineStore('game', {
     name: 'game',
     board: [],
     event: null,
-    version: null
+    version: null,
+    winnerCardDismissed: false
   }),
   persist: true,
   getters: {
@@ -38,12 +39,16 @@ export const boardStore = defineStore('game', {
     },
     resetBoard (board) {
       this.board = board
+      this.winnerCardDismissed = false
     },
     setEvent (title) {
       this.event = title
     },
     setVersion (version) {
       this.version = version
+    },
+    setWinnerCardDismissed (dismissed) {
+      this.winnerCardDismissed = dismissed
     }
   }
 })
