@@ -4,6 +4,7 @@
 
 @import url('/node_modules/source-sans/source-sans-3.css');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
 
 :root {
   --bg-track: #05070b;
@@ -106,6 +107,59 @@ a {
 .control-button:focus-visible {
   outline: 2px solid var(--accent-cyan);
   outline-offset: 2px;
+}
+
+.theme-toast {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.85rem;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.34);
+  color: var(--text-main);
+  font-family: 'Source Sans 3', sans-serif;
+  backdrop-filter: blur(18px);
+}
+
+.theme-toast.Vue-Toastification__toast {
+  min-height: 0;
+}
+
+.theme-toast .Vue-Toastification__toast-body {
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.theme-toast .Vue-Toastification__close-button {
+  color: inherit;
+  opacity: 0.72;
+}
+
+.theme-toast .Vue-Toastification__progress-bar {
+  opacity: 0.95;
+}
+
+.theme-toast--success {
+  background:
+    linear-gradient(135deg, rgba(109, 215, 255, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(13, 26, 36, 0.96), rgba(8, 14, 20, 0.98));
+  border-color: rgba(109, 215, 255, 0.3);
+}
+
+.theme-toast--success .Vue-Toastification__icon,
+.theme-toast--success .Vue-Toastification__progress-bar {
+  color: var(--accent-cyan);
+  background: var(--accent-cyan);
+}
+
+.theme-toast--error {
+  background:
+    linear-gradient(135deg, rgba(255, 91, 77, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(29, 13, 16, 0.96), rgba(20, 8, 10, 0.98));
+  border-color: rgba(255, 91, 77, 0.34);
+}
+
+.theme-toast--error .Vue-Toastification__icon,
+.theme-toast--error .Vue-Toastification__progress-bar {
+  color: var(--accent-red);
+  background: var(--accent-red);
 }
 
 .no-capture {

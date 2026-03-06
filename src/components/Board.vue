@@ -21,7 +21,7 @@ section.board-shell.surface-strong
         :class="cellClasses(cell)"
         :id="'square-' + cell.id"
       )
-        span.celltext {{ cell.text }}
+        span.celltext(:class='cellTextClasses(cell)') {{ cell.text }}
         .particles-container.absolute.inset-0.pointer-events-none.overflow-hidden(v-if="particles[cell.id]")
           div(v-for="p in particles[cell.id]" :key="p.id" class="particle" :style="p.style")
   particles.absolute.inset-0.w-full.h-full.z-10(
@@ -60,6 +60,8 @@ const WIN_CONDITIONS = [
   [1, 7, 13, 19, 25],
   [5, 9, 13, 17, 21]
 ]
+
+const EMOJI_SEGMENT_REGEX = /^\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?)*$/u
 
 export default {
   name: 'Board',
@@ -142,6 +144,38 @@ export default {
         'board-grid__cell--selected': cell.selected,
         'board-grid__cell--free': cell.id === 13
       }
+    },
+    cellTextClasses (cell) {
+      return {
+        'celltext--emoji': this.isEmojiOnlyCell(cell.text)
+      }
+    },
+    segmentText (text) {
+      if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+        const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+        return [...segmenter.segment(text)].map(({ segment }) => segment)
+      }
+
+      return Array.from(text)
+    },
+    isEmojiOnlyCell (text) {
+      if (typeof text !== 'string') {
+        return false
+      }
+
+      const trimmed = text.trim()
+
+      if (!trimmed) {
+        return false
+      }
+
+      const graphemes = this.segmentText(trimmed)
+
+      if (graphemes.length < 1 || graphemes.length > 2) {
+        return false
+      }
+
+      return graphemes.every(segment => EMOJI_SEGMENT_REGEX.test(segment))
     },
     markSquare (id) {
       if (navigator.vibrate) {
@@ -489,13 +523,22 @@ export default {
   z-index: 1;
   display: block;
   margin: 0;
-  font-family: 'Oswald', sans-serif;
-  font-size: clamp(0.72rem, 1.8vw, 0.96rem);
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: 0.01em;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(0.82rem, 1.7vw, 1rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
   text-wrap: balance;
+}
+
+.celltext--emoji {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 3.65rem);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
 }
 
 .particle {
@@ -573,12 +616,20 @@ export default {
   }
 
   .board-shell__actions {
+    flex-wrap: nowrap;
     gap: 0.55rem;
+  }
+
+  .board-shell__actions > * {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .board-shell__actions .control-button {
     width: 100%;
     justify-content: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   .board-grid {
@@ -591,8 +642,12 @@ export default {
   }
 
   .celltext {
-    font-size: 0.68rem;
-    line-height: 1.16;
+    font-size: 0.72rem;
+    line-height: 1.12;
+  }
+
+  .celltext--emoji {
+    font-size: clamp(2rem, 9vw, 3rem);
   }
 }
 </style>

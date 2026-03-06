@@ -32,41 +32,46 @@ export default {
     text: String
   },
   methods: {
-    isIOS() {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera
-
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return true
+    async tryClipboardCopy (blob) {
+      if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
+        return false
       }
 
-      if (/Macintosh/.test(userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {
-        return true
-      }
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': blob
+        })
+      ])
 
-      return false
+      return true
     },
-    async shareBoard() {
+    async createScreenshotBlob () {
+      const contentElement = document.querySelector('.app-shell__content')
+
+      if (!contentElement) {
+        throw new Error('Could not find the board to capture.')
+      }
+
+      const clonedContent = contentElement.cloneNode(true)
+      const captureFrame = document.createElement('div')
+
+      captureFrame.style.position = 'absolute'
+      captureFrame.style.top = '-9999px'
+      captureFrame.style.left = '-9999px'
+      captureFrame.style.width = '760px'
+      captureFrame.style.padding = '28px'
+      captureFrame.style.background = 'linear-gradient(180deg, #08111c 0%, #05070b 42%, #040506 100%)'
+      captureFrame.style.borderRadius = '20px'
+      captureFrame.style.boxSizing = 'border-box'
+
+      clonedContent.style.width = '100%'
+      clonedContent.style.maxWidth = '100%'
+      clonedContent.style.padding = '0'
+
+      captureFrame.appendChild(clonedContent)
+      document.body.appendChild(captureFrame)
+
       try {
-        const contentElement = document.querySelector('.app-shell__content')
-        const clonedContent = contentElement.cloneNode(true)
-        const captureFrame = document.createElement('div')
-
-        captureFrame.style.position = 'absolute'
-        captureFrame.style.top = '-9999px'
-        captureFrame.style.left = '-9999px'
-        captureFrame.style.width = '760px'
-        captureFrame.style.padding = '28px'
-        captureFrame.style.background = 'linear-gradient(180deg, #08111c 0%, #05070b 42%, #040506 100%)'
-        captureFrame.style.borderRadius = '20px'
-        captureFrame.style.boxSizing = 'border-box'
-
-        clonedContent.style.width = '100%'
-        clonedContent.style.maxWidth = '100%'
-        clonedContent.style.padding = '0'
-
-        captureFrame.appendChild(clonedContent)
-        document.body.appendChild(captureFrame)
-
         const elementsToRemove = captureFrame.querySelectorAll('.no-capture')
         elementsToRemove.forEach(el => {
           el.remove()
@@ -112,83 +117,46 @@ export default {
           el.style.color = '#f7f8fb'
         })
 
-        const options = {
+        const canvas = await html2canvas(captureFrame, {
           logging: false,
           useCORS: true,
-          backgroundColor: null,
-        }
-
-        const canvas = await html2canvas(captureFrame, options)
-
-        document.body.removeChild(captureFrame)
+          backgroundColor: null
+        })
 
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
 
         if (!blob) {
-          this.toast('Error creating image data.', { toastClassName: 'bg-red' })
-          return
+          throw new Error('Error creating image data.')
         }
 
-        if (this.isIOS()) {
-          const file = new File([blob], 'image.png', { type: 'image/png' })
+        return blob
+      } finally {
+        document.body.removeChild(captureFrame)
+      }
+    },
+    async shareBoard() {
+      try {
+        const blob = await this.createScreenshotBlob()
+        const copied = await this.tryClipboardCopy(blob)
 
-          if (navigator.share) {
-            try {
-              if (navigator.canShare && !navigator.canShare({ files: [file] })) {
-                this.toast('Sharing images is not supported on this browser.', { toastClassName: 'bg-red' })
-                return
-              }
-
-              await navigator.share({
-                title: 'f1bingo.com',
-                text: 'Share your board!',
-                files: [file]
-              })
-
-              this.$gtag.event('Click', {
-                event_category: 'Share',
-                event_label: 'Share Success'
-              })
-            } catch (error) {
-              if (error.name !== 'AbortError') {
-                this.toast(`Error sharing your board: ${error.message}`, { toastClassName: 'bg-red' })
-              }
-
-              this.$gtag.event('Click', {
-                event_category: 'Share',
-                event_label: 'Share Failure'
-              })
-            }
-          } else {
-            this.toast('Web Share API not supported in this browser', { toastClassName: 'bg-red' })
-          }
-        } else {
-          try {
-            await navigator.clipboard.write([
-              new ClipboardItem({
-                'image/png': blob
-              })
-            ])
-
-            this.toast('Board copied to your clipboard!', { toastClassName: 'bg-green' })
-            this.$gtag.event('Click', {
-              event_category: 'Share',
-              event_label: 'Share Success'
-            })
-          } catch(clipboardError) {
-            this.toast(`Error copying to clipboard: ${clipboardError.message}`, { toastClassName: 'bg-red' })
-
-            this.$gtag.event('Click', {
-              event_category: 'Share',
-              event_label: 'Share Failure'
-            })
-          }
+        if (!copied) {
+          throw new Error('Clipboard image sharing is not supported on this browser.')
         }
+
+        this.toast('Board copied to your clipboard!', { toastClassName: 'theme-toast theme-toast--success' })
+        this.$gtag.event('Click', {
+          event_category: 'Share',
+          event_label: 'Clipboard Share Success'
+        })
 
         return true
       } catch (error) {
         console.error('Screenshot sharing failed:', error)
-        this.toast(`Error copying to clipboard ${error}`, { toastClassName: 'bg-red' })
+        this.toast(`Error sharing your board: ${error.message || error}`, { toastClassName: 'theme-toast theme-toast--error' })
+        this.$gtag.event('Click', {
+          event_category: 'Share',
+          event_label: 'Share Failure'
+        })
       }
     }
   }
