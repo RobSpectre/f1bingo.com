@@ -150,8 +150,11 @@ export default {
       }
     },
     cellTextClasses (cell) {
+      const emojiSegments = this.getEmojiOnlySegments(cell.text)
+
       return {
-        'celltext--emoji': this.isEmojiOnlyCell(cell.text)
+        'celltext--emoji': Boolean(emojiSegments),
+        'celltext--emoji-single': emojiSegments?.length === 1
       }
     },
     segmentText (text) {
@@ -162,24 +165,28 @@ export default {
 
       return Array.from(text)
     },
-    isEmojiOnlyCell (text) {
+    getEmojiOnlySegments (text) {
       if (typeof text !== 'string') {
-        return false
+        return null
       }
 
       const trimmed = text.trim()
 
       if (!trimmed) {
-        return false
+        return null
       }
 
       const graphemes = this.segmentText(trimmed)
 
       if (graphemes.length < 1 || graphemes.length > 2) {
-        return false
+        return null
       }
 
-      return graphemes.every(segment => EMOJI_SEGMENT_REGEX.test(segment))
+      if (!graphemes.every(segment => EMOJI_SEGMENT_REGEX.test(segment))) {
+        return null
+      }
+
+      return graphemes
     },
     markSquare (id) {
       if (navigator.vibrate) {
@@ -541,12 +548,21 @@ export default {
 }
 
 .celltext--emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
   font-family: 'Source Sans 3', sans-serif;
   font-size: clamp(2.4rem, 6vw, 3.65rem);
   line-height: 1;
   letter-spacing: 0;
   text-transform: none;
   text-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.celltext--emoji-single {
+  transform: translateY(-0.06em);
 }
 
 .particle {

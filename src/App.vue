@@ -29,6 +29,19 @@ export default {
   padding: 1rem;
 }
 
+.app-shell--capture {
+  width: 760px;
+  min-height: auto;
+  padding: 1.5rem;
+  border-radius: 1.35rem;
+  box-sizing: border-box;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at top, rgba(109, 215, 255, 0.14), transparent 34%),
+    radial-gradient(circle at 85% 15%, rgba(255, 91, 77, 0.16), transparent 24%),
+    linear-gradient(180deg, #08111c 0%, #05070b 42%, #040506 100%);
+}
+
 .app-shell__content {
   position: relative;
   z-index: 1;
@@ -38,6 +51,12 @@ export default {
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 0 2rem;
+}
+
+.app-shell--capture .app-shell__content {
+  max-width: none;
+  gap: 1rem;
+  padding: 0;
 }
 
 .app-shell__grid {
