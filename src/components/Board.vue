@@ -61,6 +61,10 @@ const WIN_CONDITIONS = [
   [5, 9, 13, 17, 21]
 ]
 
+const FREE_SQUARE_ID = 13
+const FREE_SQUARE_INDEX = 12
+const FREE_SQUARE_TEXT = 'Lights Out! (Free)'
+
 const EMOJI_SEGMENT_REGEX = /^\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?)*$/u
 
 export default {
@@ -132,8 +136,8 @@ export default {
           return true
         }
 
-        if (index === 12) {
-          return cell.text !== 'Lights Out! (Free)'
+        if (index === FREE_SQUARE_INDEX) {
+          return cell.text !== FREE_SQUARE_TEXT || cell.selected !== true
         }
 
         return false
@@ -142,7 +146,7 @@ export default {
     cellClasses (cell) {
       return {
         'board-grid__cell--selected': cell.selected,
-        'board-grid__cell--free': cell.id === 13
+        'board-grid__cell--free': cell.id === FREE_SQUARE_ID
       }
     },
     cellTextClasses (cell) {
@@ -183,6 +187,10 @@ export default {
       }
 
       const square = this.game.getSquareById(id)
+
+      if (square.id === FREE_SQUARE_ID && square.selected) {
+        return id
+      }
 
       if (!square.selected) {
         this.spawnParticles(id)
@@ -242,8 +250,8 @@ export default {
       const newBoard = []
 
       for (let i = 0; i < 25; i++) {
-        if (i === 12) {
-          newBoard.push({ id: id, text: 'Lights Out! (Free)', selected: true })
+        if (i === FREE_SQUARE_INDEX) {
+          newBoard.push({ id: id, text: FREE_SQUARE_TEXT, selected: true })
         } else {
           newBoard.push({ id: id, text: deck[deckIndex], selected: false })
           deckIndex++

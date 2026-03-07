@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 
+const FREE_SQUARE_ID = 13
+
 export const boardStore = defineStore('game', {
   state: () => ({
     name: 'game',
@@ -29,8 +31,13 @@ export const boardStore = defineStore('game', {
     markSquare (id) {
       this.board.forEach((cell) => {
         if (cell.id === id) {
+          if (cell.id === FREE_SQUARE_ID) {
+            cell.selected = true
+            return
+          }
+
           if (cell.selected === true) {
-            cell.selected = false 
+            cell.selected = false
           } else {
             cell.selected = true
           }
