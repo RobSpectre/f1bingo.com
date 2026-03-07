@@ -1,6 +1,6 @@
 {
   "event": "Formula 1 Qatar Airways Australian Grand Prix 2026",
-  "version": 2,
+  "version": 4,
   "squares": [
     "\"Super clipping\"",
     "P1 >20 sec ahead",
@@ -18,7 +18,7 @@
     "Lindblad in points",
     "Track limits",
     "\"Ferrari rear wing\"",
-    "\"Compression ratio\"",
+    "\"Harvesting\"",
     "🚁",
     "Ferrari borks strategy",
     "Tyre puncture",
