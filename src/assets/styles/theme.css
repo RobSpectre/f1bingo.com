@@ -1,10 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import url('/node_modules/source-sans/source-sans-3.css');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
+@import "tailwindcss";
+@import "source-sans/source-sans-3.css";
+
+@config "../../../tailwind.config.js";
+
+/* Preserve the pointer cursor used by Tailwind 3. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 :root {
   --bg-track: #05070b;

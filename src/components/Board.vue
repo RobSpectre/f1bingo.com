@@ -77,7 +77,7 @@ export default {
   setup() {
     const game = boardStore()
 
-    return { game }
+    return { game, cards }
   },
   data () {
     return {

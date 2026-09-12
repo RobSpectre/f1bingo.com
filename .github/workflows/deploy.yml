@@ -1,14 +1,27 @@
 name: Build Vue
-on: [push]
+on: [push, pull_request]
+
+permissions:
+  contents: write
+
 jobs:
   build_vue:
     runs-on: ubuntu-latest
-    name: Build Vue
+    name: Build and test Vue
     steps:
-    - uses: actions/checkout@v2
-    - id: Build-Vue
-      uses: xRealNeon/VuePagesAction@1.0.1
-      with:
-        username: 'RobSpectre'
-        reponame: 'f1bingo.com'
-        token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:dev
+      - run: npm test
+      - run: cp dist/index.html dist/404.html
+      - uses: peaceiris/actions-gh-pages@v4
+        if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: f1bingo.com

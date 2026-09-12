@@ -3,30 +3,33 @@
   "private": true,
   "version": "0.0.2",
   "engines": {
-    "node": "^20.0.0 || ^22.0.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --strictPort",
     "build": "vite build && echo 'f1bingo.com' > dist/CNAME",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "playwright test",
+    "test:dev": "TEST_DEV=1 playwright test"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
-    "html2canvas-pro": "^1.5.13",
+    "html2canvas-pro": "^2.4.2",
     "mitt": "^3.0.1",
-    "pinia": "^3.0.4",
+    "pinia": "^4.0.3",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "vue": "^3.5.25",
-    "vue-gtag": "2.0.1",
+    "vue": "^3.5.42",
+    "vue-gtag": "^3.7.1",
     "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
-    "autoprefixer": "^10.4.22",
-    "pug": "^3.0.3",
-    "sass": "^1.94.2",
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "pug": "^3.0.4",
+    "sass": "^1.104.1",
     "source-sans": "^3.52.0",
-    "tailwindcss": "^3.4.18",
-    "vite": "^6.4.1"
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0"
   }
 }

@@ -24,3 +24,7 @@ node_modules*
 
 dist/
 dist/*
+
+# Browser test artifacts
+/test-results/
+/playwright-report/

@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import VueGtag from 'vue-gtag'
+import { createGtag } from 'vue-gtag'
 import mitt from 'mitt'
 import { createPinia } from 'pinia'
 import Toast from "vue-toastification"
@@ -8,13 +8,14 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 
-import '@/assets/styles/theme.scss'
+import '@/assets/styles/theme.css'
 
 const app = createApp(App)
 
-app.use(VueGtag, {
-  config: { id: 'G-9DH48XP22E' }
-})
+app.use(createGtag({
+  tagId: 'G-9DH48XP22E',
+  config: { send_page_view: true }
+}))
 
 const emitter = mitt()
 
