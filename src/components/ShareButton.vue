@@ -80,7 +80,19 @@ export default {
         const canvas = await html2canvas(clonedApp, {
           logging: false,
           useCORS: true,
-          backgroundColor: null
+          backgroundColor: null,
+          // Production CSS is a linked stylesheet; the capture iframe can load
+          // before that stylesheet has finished loading.
+          onclone: async (document) => {
+            await Promise.all(Array.from(document.querySelectorAll('link[rel="stylesheet"]'), link => {
+              if (link.sheet) return Promise.resolve()
+              return new Promise((resolve, reject) => {
+                link.addEventListener('load', resolve, { once: true })
+                link.addEventListener('error', () => reject(new Error('Could not load board styles.')), { once: true })
+              })
+            }))
+            await document.fonts.ready
+          }
         })
 
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
