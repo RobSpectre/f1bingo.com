@@ -81,17 +81,19 @@ export default {
           logging: false,
           useCORS: true,
           backgroundColor: null,
-          // Production CSS is a linked stylesheet; the capture iframe can load
-          // before that stylesheet has finished loading.
-          onclone: async (document) => {
-            await Promise.all(Array.from(document.querySelectorAll('link[rel="stylesheet"]'), link => {
-              if (link.sheet) return Promise.resolve()
-              return new Promise((resolve, reject) => {
-                link.addEventListener('load', resolve, { once: true })
-                link.addEventListener('error', () => reject(new Error('Could not load board styles.')), { once: true })
-              })
-            }))
-            await document.fonts.ready
+          // Snapshot loaded same-origin CSS so the iframe does not race a
+          // second stylesheet request when rendering the production build.
+          onclone: async (captureDocument) => {
+            for (const sheet of document.styleSheets) {
+              if (!sheet.href || new URL(sheet.href).origin !== location.origin) continue
+              const link = Array.from(captureDocument.querySelectorAll('link[rel="stylesheet"]'))
+                .find(link => link.href === sheet.href)
+              if (!link) continue
+              const style = captureDocument.createElement('style')
+              style.textContent = Array.from(sheet.cssRules, rule => rule.cssText).join('\n')
+              link.replaceWith(style)
+            }
+            await captureDocument.fonts.ready
           }
         })
 
