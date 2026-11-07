@@ -1,0 +1,406 @@
+// Senna tribute theme for the 2026 São Paulo GP weekend.
+// Every rule is scoped to html.theme-senna, which App.vue only adds while
+// the tribute window is open. Ayrton's home city holds his card: the board
+// hangs under a green span on raw concrete, in the flag's green, yellow and
+// blue, and the squares are glass panes on concrete plinths that fill with
+// helmet yellow when marked.
+
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@500;600;700&display=swap');
+
+html.theme-senna {
+  --sp-concrete: #c3beb4;
+  --sp-concrete-light: #d8d4cb;
+  --sp-concrete-dark: #8c867c;
+  --sp-green: #00843d;
+  --sp-green-deep: #006b31;
+  --sp-blue: #002776;
+  --sp-blue-deep: #001a52;
+  --sp-ink: #1b1a18;
+  --sp-ink-soft: #45413b;
+  --sp-yellow: #ffd21f;
+  --sp-glass-edge: rgba(255, 255, 255, 0.85);
+  --sp-display: 'Tomorrow', 'Oswald', sans-serif;
+
+  color-scheme: light;
+  background: linear-gradient(180deg, #cdc8bf 0%, var(--sp-concrete) 55%, #b6b0a6 100%);
+  scrollbar-color: var(--sp-concrete-dark) var(--sp-concrete);
+
+  ::selection {
+    background: var(--sp-yellow);
+    color: var(--sp-ink);
+  }
+
+  body {
+    color: var(--sp-ink);
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--sp-display);
+    letter-spacing: 0;
+  }
+
+  // Shell: drop the night-track grid and glows.
+  .app-shell__grid,
+  .app-shell__glow {
+    display: none;
+  }
+
+  .app-shell--capture {
+    background: var(--sp-concrete);
+  }
+
+  // The plaza: the board sits on light concrete between two green pillars.
+  .board-shell {
+    --pillar: 14px;
+    padding: 0 calc(var(--pillar) + 1rem) 1.4rem;
+    border: 0;
+    border-radius: 4px;
+    background: var(--sp-concrete-light);
+    box-shadow: 0 18px 40px rgba(60, 52, 40, 0.22), 0 2px 6px rgba(60, 52, 40, 0.12);
+    backdrop-filter: none;
+  }
+
+  .board-shell::before,
+  .board-shell::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--pillar);
+    background: var(--sp-green);
+    pointer-events: none;
+  }
+
+  .board-shell::before { left: 0; }
+  .board-shell::after { right: 0; }
+
+  // The span: the header is the green beam across the top of the frame.
+  .board-shell__header {
+    margin: 0 calc(-1 * (var(--pillar) + 1rem)) 1.1rem;
+    padding: 1.35rem calc(var(--pillar) + 1.25rem) 1.5rem;
+    border: 0;
+    border-radius: 4px 4px 0 0;
+    background: var(--sp-green);
+    box-shadow: 0 10px 18px rgba(0, 60, 25, 0.24);
+    color: #fff;
+  }
+
+  .board-shell__header::before {
+    display: none;
+  }
+
+  // Underside of the beam: a darker lip, like the shadow line of the span.
+  .board-shell__header::after {
+    height: 6px;
+    background: var(--sp-green-deep);
+  }
+
+  .board-shell__title {
+    max-width: none;
+    font-size: clamp(2.6rem, 6.4vw, 4.75rem);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-shadow: none;
+  }
+
+  .board-shell__event {
+    font-family: var(--sp-display);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #fff;
+  }
+
+  .board-shell__signal span {
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.22);
+    box-shadow: none;
+  }
+
+  .board-shell__signal span:nth-child(-n + 3) {
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .board-shell__hint {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  // Controls on the beam.
+  .control-button {
+    border-radius: 3px;
+    font-family: var(--sp-display);
+    letter-spacing: 0.12em;
+  }
+
+  .control-button--primary {
+    background: var(--sp-blue);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(0, 20, 50, 0.32);
+  }
+
+  .control-button--primary:hover {
+    background: var(--sp-blue-deep);
+    box-shadow: 0 12px 24px rgba(0, 20, 50, 0.4);
+  }
+
+  .control-button--secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    color: #fff;
+  }
+
+  .control-button--secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .control-button:focus-visible,
+  .board-grid__cell:focus-visible {
+    outline: 3px solid var(--sp-ink);
+    outline-offset: 3px;
+  }
+
+  .board-shell__header .control-button:focus-visible {
+    outline-color: #fff;
+  }
+
+  .section-label,
+  .footer__eyebrow {
+    font-family: var(--sp-display);
+  }
+
+  .section-label {
+    letter-spacing: 0.16em;
+  }
+
+  // Squares: glass panes standing on concrete plinths.
+  .board-grid {
+    gap: 1rem 0.85rem;
+  }
+
+  .board-grid__cell-wrapper {
+    position: relative;
+    padding-bottom: 9px;
+  }
+
+  .board-grid__cell-wrapper::after {
+    content: '';
+    position: absolute;
+    left: 30%;
+    right: 30%;
+    bottom: 0;
+    height: 9px;
+    background: linear-gradient(180deg, #a49e94, var(--sp-concrete-dark));
+    box-shadow: 0 3px 6px rgba(60, 52, 40, 0.28);
+  }
+
+  .board-grid__cell {
+    border: 1px solid var(--sp-glass-edge);
+    border-right-color: rgba(120, 170, 150, 0.7);
+    border-bottom-color: rgba(120, 170, 150, 0.55);
+    border-radius: 2px;
+    background-color: rgba(236, 244, 240, 0.42);
+    background-image:
+      linear-gradient(var(--sp-yellow), var(--sp-yellow)),
+      linear-gradient(155deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.18) 38%, rgba(214, 232, 224, 0.32) 100%);
+    background-repeat: no-repeat;
+    background-position: bottom, center;
+    background-size: 100% 0%, 100% 100%;
+    box-shadow:
+      inset 0 0 0 1px rgba(150, 190, 175, 0.35),
+      0 10px 18px rgba(60, 52, 40, 0.14);
+    color: var(--sp-ink);
+    animation: none;
+    transition:
+      background-size 420ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  // A crisp reflection across the glass.
+  .board-grid__cell::before {
+    inset: 0;
+    background: linear-gradient(118deg, transparent 0 16%, rgba(255, 255, 255, 0.6) 16% 21%, transparent 21% 25%, rgba(255, 255, 255, 0.35) 25% 27%, transparent 27%);
+    opacity: 0.7;
+    transition: opacity 200ms ease;
+  }
+
+  .board-grid__cell--selected::before,
+  .board-grid__cell--free::before {
+    opacity: 0.35;
+  }
+
+  .board-grid__cell::after {
+    display: none;
+  }
+
+  .board-grid__cell:hover {
+    transform: translateY(-2px);
+    border-color: #fff;
+    box-shadow:
+      inset 0 0 0 1px rgba(150, 190, 175, 0.45),
+      0 16px 26px rgba(60, 52, 40, 0.2);
+  }
+
+  // Marked: helmet yellow fills the pane from the plinth up.
+  .board-grid__cell--selected {
+    background-size: 100% 100%, 100% 100%;
+    border-color: #fff3b0;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+      0 12px 22px rgba(150, 110, 0, 0.22);
+  }
+
+  // Free square: the blue of the flag's globe.
+  .board-grid__cell--free {
+    background-image:
+      linear-gradient(var(--sp-blue), var(--sp-blue)),
+      none;
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+  }
+
+  .celltext {
+    font-family: var(--sp-display);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .celltext--emoji {
+    text-shadow: none;
+  }
+
+  // The deck's own "Senna tribute" square carries the helmet stripe.
+  .board-grid__cell--senna::after {
+    display: block;
+    inset: auto 0.55rem 0.55rem;
+    height: 6px;
+    border-radius: 0;
+    background: linear-gradient(180deg, #ffd21f 0 2px, #1fa04f 2px 4px, #2f6fd6 4px 6px);
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .board-grid__cell--senna .celltext {
+    color: var(--sp-ink);
+  }
+
+  .board-grid__cell--senna.board-grid__cell--selected::after {
+    background: linear-gradient(180deg, #1b1a18 0 2px, #1fa04f 2px 4px, #2f6fd6 4px 6px);
+  }
+
+  // Winner card: a slab of the green span.
+  .winner-modal {
+    background: rgba(70, 62, 52, 0.45);
+  }
+
+  .winner-panel {
+    border: 0;
+    border-radius: 4px;
+    background: var(--sp-green);
+    color: #fff;
+  }
+
+  .winner-panel::before {
+    display: none;
+  }
+
+  .winner-panel .section-label {
+    color: #fff;
+  }
+
+  .winner-panel__close {
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+  }
+
+  // Footer: an inscription on the plaza.
+  .footer-shell {
+    border: 0;
+    border-radius: 4px;
+    background: var(--sp-concrete-light);
+    box-shadow: 0 10px 24px rgba(60, 52, 40, 0.16);
+    backdrop-filter: none;
+    color: var(--sp-ink);
+  }
+
+  .footer-shell .section-label {
+    color: var(--sp-green-deep);
+  }
+
+  .footer-shell__icon {
+    border-radius: 3px;
+    border-color: rgba(27, 26, 24, 0.2);
+    background: transparent;
+    color: var(--sp-ink);
+  }
+
+  .footer-shell__icon:hover {
+    border-color: var(--sp-ink);
+    background: rgba(27, 26, 24, 0.06);
+  }
+
+  .footer-shell__icon:focus-visible,
+  .footer-shell a:focus-visible {
+    outline: 3px solid var(--sp-ink);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .board-grid__cell {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .board-shell {
+      --pillar: 8px;
+      padding: 0 calc(var(--pillar) + 0.55rem) 1rem;
+    }
+
+    .board-shell__header {
+      margin: 0 calc(-1 * (var(--pillar) + 0.55rem)) 0.9rem;
+      padding: 1rem calc(var(--pillar) + 0.85rem) 1.2rem;
+    }
+
+    .board-shell__title {
+      font-size: 2.3rem;
+    }
+
+    .board-grid {
+      gap: 0.6rem 0.4rem;
+    }
+
+    .board-grid__cell-wrapper {
+      padding-bottom: 6px;
+    }
+
+    .board-grid__cell {
+      padding: 0.3rem 0.2rem;
+    }
+
+    .celltext {
+      font-size: 0.6rem;
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+
+    .celltext.celltext--emoji {
+      font-size: clamp(1.8rem, 8.5vw, 2.6rem);
+      line-height: 1;
+    }
+
+    .board-grid__cell-wrapper::after {
+      height: 6px;
+    }
+
+    .board-grid__cell--senna::after {
+      inset: auto 0.3rem 0.3rem;
+      height: 4px;
+      background: linear-gradient(180deg, #ffd21f 0 2px, #1fa04f 2px 3px, #2f6fd6 3px 4px);
+    }
+  }
+}

@@ -4,6 +4,9 @@ canvas(ref="canvas" class="particles-canvas")
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, defineProps, computed } from 'vue'
+import { isSennaTributeActive, HELMET_COLORS } from '@/tributes/senna'
+
+const SENNA_ACTIVE = isSennaTributeActive(Date.now(), window.location.search)
 
 const props = defineProps({
   index: {
@@ -70,7 +73,9 @@ class Particle {
     this.width = this.baseWidth
     
     this.opacity = 0
-    this.color = '#00a0de' // Wet tire blue
+    this.color = SENNA_ACTIVE
+      ? HELMET_COLORS[Math.floor(Math.random() * HELMET_COLORS.length)]
+      : '#00a0de' // Wet tire blue
     
     if (initial) {
         this.opacity = Math.random()

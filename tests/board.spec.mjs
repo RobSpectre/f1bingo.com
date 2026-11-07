@@ -86,3 +86,28 @@ test('unsupported clipboard shows an error without disrupting gameplay', async (
   await page.locator('#square-1').click()
   await expect(page.locator(selected)).toHaveCount(2)
 })
+
+test('Senna tribute shows during the São Paulo GP weekend only', async ({ page }) => {
+  const saved = {
+    name: 'game', event: deck.event, version: deck.version, winnerCardDismissed: false,
+    board: Array.from({ length: 25 }, (_, i) => ({ id: i + 1, text: i === 12 ? 'Lights Out! (Free)' : i === 0 ? 'Senna tribute' : `Saved event ${i + 1}`, selected: i === 12 }))
+  }
+  await page.addInitScript(state => { if (!localStorage.getItem('game')) localStorage.setItem('game', JSON.stringify(state)) }, saved)
+  await page.clock.setFixedTime(new Date('2026-11-08T17:00:00Z'))
+  await page.goto('/')
+  await expect(page.getByRole('complementary', { name: 'Tribute to Ayrton Senna' })).toContainText('Obrigado, Ayrton')
+  await expect(page.locator('html')).toHaveClass(/theme-senna/)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await expect(page.locator('#square-1')).toHaveClass(/board-grid__cell--senna/)
+  await page.locator('#square-1').click()
+  await expect(page.locator('#square-1')).toHaveClass(/board-grid__cell--selected/)
+
+  await page.clock.setFixedTime(new Date('2026-11-12T12:00:00Z'))
+  await page.reload()
+  await expect(page.locator('.senna-tribute')).toHaveCount(0)
+  await expect(page.locator('html')).not.toHaveClass(/theme-senna/)
+  await expect(page.locator('.board-grid__cell--senna')).toHaveCount(0)
+
+  await page.goto('/?tribute=senna')
+  await expect(page.locator('.senna-tribute')).toHaveCount(1)
+})

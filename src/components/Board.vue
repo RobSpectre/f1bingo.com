@@ -14,6 +14,7 @@ section.board-shell.surface-strong
         type='button'
         @click='resetBoard()'
       ) Reset Grid
+  SennaTribute(v-if='sennaTribute')
   #board.board-grid
     div(v-for='cell in game.board' :key='cell.id' class='board-grid__cell-wrapper')
       button.board-grid__cell(
@@ -43,6 +44,8 @@ import cards from '@/assets/data/deck.json'
 import ShareButton from '@/components/ShareButton.vue'
 import WinnerCard from '@/components/WinnerCard.vue'
 import Particles from '@/components/Particles.vue'
+import SennaTribute from '@/components/SennaTribute.vue'
+import { isSennaTributeActive, TRIBUTE_SQUARE_TEXT, HELMET_COLORS } from '@/tributes/senna'
 
 import { boardStore } from '@/store/board'
 
@@ -72,7 +75,8 @@ export default {
   components: {
     ShareButton,
     WinnerCard,
-    Particles
+    Particles,
+    SennaTribute
   },
   setup() {
     const game = boardStore()
@@ -82,6 +86,7 @@ export default {
   data () {
     return {
       particles: {},
+      sennaTribute: isSennaTributeActive(Date.now(), window.location.search),
       victorySoundPlayed: false
     }
   },
@@ -146,8 +151,12 @@ export default {
     cellClasses (cell) {
       return {
         'board-grid__cell--selected': cell.selected,
-        'board-grid__cell--free': cell.id === FREE_SQUARE_ID
+        'board-grid__cell--free': cell.id === FREE_SQUARE_ID,
+        'board-grid__cell--senna': this.isSennaSquare(cell)
       }
+    },
+    isSennaSquare (cell) {
+      return this.sennaTribute && cell.text === TRIBUTE_SQUARE_TEXT
     },
     cellTextClasses (cell) {
       const emojiSegments = this.getEmojiOnlySegments(cell.text)
@@ -222,6 +231,7 @@ export default {
       }
 
       const particleCount = 12
+      const sennaSquare = this.isSennaSquare(this.game.getSquareById(cellId))
       const newParticles = []
 
       for (let i = 0; i < particleCount; i++) {
@@ -237,7 +247,7 @@ export default {
             '--angle': `${angle}rad`,
             width: `${length}px`,
             height: `${thickness}px`,
-            backgroundColor: '#f5c451'
+            backgroundColor: sennaSquare ? HELMET_COLORS[i % HELMET_COLORS.length] : '#f5c451'
           }
         })
       }
