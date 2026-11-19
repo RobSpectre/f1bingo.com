@@ -12,11 +12,15 @@ div#app.app-shell
 import Footer from '@/components/Footer.vue'
 import Board from '@/components/Board.vue'
 import { isSennaTributeActive } from '@/tributes/senna'
+import cards from '@/assets/data/deck.json'
 import '@/tributes/senna-theme.scss'
+import '@/assets/styles/vegas.scss'
 
 // Senna tribute: restyles the whole app during the São Paulo GP weekend.
 if (isSennaTributeActive(Date.now(), window.location.search)) {
   document.documentElement.classList.add('theme-senna')
+} else if (cards.theme === 'las-vegas') {
+  document.documentElement.classList.add('theme-vegas')
 }
 
 export default {

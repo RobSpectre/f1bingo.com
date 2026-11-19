@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 const FREE_SQUARE_ID = 13
 
-export const boardStore = defineStore('game', {
+const boardOptions = {
   state: () => ({
     name: 'game',
     board: [],
@@ -58,4 +58,7 @@ export const boardStore = defineStore('game', {
       this.winnerCardDismissed = dismissed
     }
   }
-})
+}
+
+export const boardStore = defineStore('game', boardOptions)
+export const sennaPreviewStore = defineStore('senna-preview', boardOptions)

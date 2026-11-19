@@ -74,7 +74,7 @@ export default {
   height: 4px;
   margin: 0 0.65rem;
   vertical-align: middle;
-  background: var(--sp-green, #00843d);
+  background: var(--sp-red, #c81e1e);
 }
 
 @media (max-width: 640px) {

@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 import deck from '../src/assets/data/deck.json' with { type: 'json' }
 
+import sennaDeck from '../src/tributes/senna-deck.json' with { type: 'json' }
+
 const selected = '.board-grid__cell--selected'
 
 test.beforeEach(async ({ page }) => {
@@ -89,7 +91,7 @@ test('unsupported clipboard shows an error without disrupting gameplay', async (
 
 test('Senna tribute shows during the São Paulo GP weekend only', async ({ page }) => {
   const saved = {
-    name: 'game', event: deck.event, version: deck.version, winnerCardDismissed: false,
+    name: 'game', event: sennaDeck.event, version: sennaDeck.version, winnerCardDismissed: false,
     board: Array.from({ length: 25 }, (_, i) => ({ id: i + 1, text: i === 12 ? 'Lights Out! (Free)' : i === 0 ? 'Senna tribute' : `Saved event ${i + 1}`, selected: i === 12 }))
   }
   await page.addInitScript(state => { if (!localStorage.getItem('game')) localStorage.setItem('game', JSON.stringify(state)) }, saved)
@@ -110,4 +112,21 @@ test('Senna tribute shows during the São Paulo GP weekend only', async ({ page 
 
   await page.goto('/?tribute=senna')
   await expect(page.locator('.senna-tribute')).toHaveCount(1)
+})
+
+test('Las Vegas replaces last race’s card and survives a tribute preview', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-11-19T18:00:00Z'))
+  await page.goto('/?tribute=senna')
+  await page.evaluate(() => localStorage.setItem('game', localStorage.getItem('senna-preview')))
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: /Las Vegas.*Grand Prix/i })).toBeVisible()
+  await expect(page.locator(selected)).toHaveCount(1)
+  const card = await page.locator('.celltext').allTextContents()
+  expect(card.filter((_, i) => i !== 12).every(text => deck.squares.includes(text))).toBe(true)
+  await page.locator('#square-1').click()
+  await page.goto('/?tribute=senna')
+  await expect(page.locator('.senna-tribute')).toBeVisible()
+  await page.goto('/')
+  await expect(page.locator('#square-1')).toHaveAttribute('aria-pressed', 'true')
+  expect(await page.locator('.celltext').allTextContents()).toEqual(card)
 })

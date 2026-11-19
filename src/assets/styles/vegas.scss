@@ -1,0 +1,261 @@
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../fonts/BarlowCondensed-ExtraBoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+}
+
+.theme-vegas {
+  --paper: #f5eddf;
+  --ink: #302031;
+  --muted-ink: #68555c;
+  --rule: #cbbbad;
+  --pink: #ad2451;
+  --butter: #ffe5a7;
+  --display: 'Barlow Condensed', 'Source Sans 3', sans-serif;
+  background: var(--paper);
+  color-scheme: light;
+
+  body { color: var(--ink); }
+  ::selection { color: white; background: var(--pink); }
+
+  .app-shell {
+    padding: 0 clamp(12px, 4vw, 60px) 1.25rem;
+    background: var(--paper);
+  }
+
+  .app-shell__content { max-width: 1040px; gap: 1.25rem; padding: 0; }
+  .app-shell__grid, .app-shell__glow { display: none; }
+
+  .board-shell, .footer-shell {
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+    backdrop-filter: none;
+    padding: 0;
+  }
+
+  .board-shell { overflow: visible; }
+
+  .vegas-brandbar, .vegas-wordmark, .board-shell__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .vegas-brandbar { min-height: 3.8rem; gap: 1rem; }
+  .vegas-wordmark, .vegas-card-title h2, .vegas-letters, .vegas-poster h1, .winner-panel__title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+
+  .vegas-wordmark { gap: 0.45rem; font-size: 1.6rem; }
+  .vegas-flag { width: 33px; height: 26px; color: var(--pink); }
+  .vegas-season, .vegas-date {
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  .vegas-season { font-size: .76rem; color: var(--muted-ink); }
+
+  .vegas-poster {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(20px, 3vw, 42px);
+    min-height: clamp(210px, 24vw, 280px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background: #30172c url('../vegas-race-poster.webp') center center / cover no-repeat;
+    border-radius: 6px;
+    color: var(--butter);
+  }
+  .vegas-poster h1 {
+    font-size: clamp(3.9rem, 6.8vw, 6.1rem);
+    line-height: .84;
+    letter-spacing: -.025em;
+  }
+  .vegas-poster h1 span { display: block; }
+  .vegas-poster h1 span + span { color: #ff9899; }
+  .vegas-date {
+    margin-top: 1.25rem;
+    padding: .23rem .5rem;
+    background: var(--butter);
+    color: var(--ink);
+    font-size: clamp(.69rem, 1vw, .8rem);
+    line-height: 1.15;
+  }
+
+  .board-shell__header {
+    gap: 1rem;
+    min-height: auto;
+    overflow: visible;
+    margin: 0;
+    padding: 1.35rem 0 1rem;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .board-shell__header::before, .board-shell__header::after { content: none; }
+  .vegas-card-title h2 { font-size: clamp(1.65rem, 3vw, 2.2rem); }
+  .vegas-card-title p { margin-top: .25rem; color: var(--muted-ink); line-height: 1.3; }
+  .board-shell__actions { align-items: center; gap: .55rem; }
+  .control-button {
+    min-height: 42px;
+    padding: .55rem 1.05rem;
+    font: 700 .97rem/1.1 'Source Sans 3', sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+    border-radius: 5px;
+    box-shadow: none;
+  }
+  .control-button--primary { background: var(--pink); color: #fff8ed; }
+  .control-button--primary:hover { background: #8b1940; }
+  .control-button--secondary { color: var(--ink); background: transparent; border: 1px solid #ae9d95; }
+  .control-button--secondary:hover { background: #eee0d2; }
+  .vegas-reset-icon { width: 1rem; height: 1rem; margin-right: .4rem; }
+  :is(.board-grid__cell, .control-button, a):focus-visible {
+    z-index: 2;
+    outline: 3px solid var(--pink);
+    outline-offset: 2px;
+  }
+
+  .vegas-letters {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-radius: 5px 5px 0 0;
+    background: var(--ink);
+    color: var(--butter);
+    font-size: 1.65rem;
+    text-align: center;
+    padding: .42rem 1px .5rem;
+  }
+  .board-grid {
+    gap: 1px;
+    padding: 0 1px 1px;
+    border-radius: 0 0 5px 5px;
+    background: var(--rule);
+  }
+  .board-grid__cell {
+    flex-direction: column;
+    gap: .15rem;
+    padding: .6rem;
+    background: #fff9ef;
+    color: var(--ink);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    animation: none;
+    transition: background-color 130ms ease;
+  }
+  .board-grid__cell-wrapper:nth-last-child(5) button { border-bottom-left-radius: 4px; }
+  .board-grid__cell-wrapper:last-child button { border-bottom-right-radius: 4px; }
+  .board-grid__cell::before, .board-grid__cell::after { content: none; }
+  .board-grid__cell:hover { transform: none; }
+  @media (hover: hover) {
+    .board-grid__cell:not(.board-grid__cell--selected):hover { background: #f5e1df; }
+  }
+  .board-grid__cell:focus-visible { outline-offset: -3px; }
+  .board-grid__cell--selected { background: var(--pink); color: white; }
+  .board-grid__cell--selected:not(.board-grid__cell--free)::after {
+    content: '';
+    position: absolute;
+    inset: 8px 9px auto auto;
+    width: 6px;
+    height: 10px;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    background: none;
+    opacity: 1;
+    transform: rotate(45deg);
+    animation: none;
+  }
+  .board-grid__cell--free {
+    background: var(--butter);
+    color: #742b43;
+    outline: 1px solid #be8768;
+    outline-offset: -4px;
+  }
+  .vegas-star { height: 25px; width: 25px; }
+  .celltext {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: clamp(.85rem, 1.5vw, 1.14rem);
+    font-weight: 650;
+    letter-spacing: 0;
+    line-height: 1.12;
+    text-transform: none;
+    overflow-wrap: anywhere;
+  }
+
+  .footer-shell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem;
+    color: var(--muted-ink);
+  }
+  .footer-shell .section-label, .footer__eyebrow {
+    color: inherit;
+    font: 400 .85rem/1.4 'Source Sans 3', sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .footer-shell .section-label a { color: var(--ink); font-weight: 650; }
+  .footer-shell__links { gap: .15rem; }
+  .footer-shell__icon { color: var(--ink); background: transparent; border: 0; }
+  .footer-shell__icon:hover { color: var(--pink); }
+
+  .winner-panel { color: var(--butter); background: var(--ink); animation: victoryPopIn 250ms ease-out; }
+  .winner-panel .section-label { color: #ffb3b7; }
+  .winner-panel__title { font-size: 3.3rem; }
+
+  .app-shell--capture {
+    padding: 0 18px 18px;
+    border-radius: 0;
+    .vegas-poster { min-height: 190px; background-position: center; }
+    .vegas-poster h1 { font-size: 4rem; }
+    .celltext { font-size: 1rem; }
+  }
+
+  @media (max-width: 600px) {
+    .vegas-brandbar { min-height: 3.1rem; }
+    .vegas-wordmark { font-size: 1.35rem; }
+    .vegas-flag { width: 26px; }
+    .vegas-season { font-size: .67rem; }
+    .vegas-poster {
+      min-height: 170px;
+      padding: 1rem;
+      background-position: 60% center;
+    }
+    .vegas-poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, #30172cf2, #30172c99 36%, transparent 68%);
+    }
+    .vegas-poster h1 { font-size: clamp(2.9rem, 10vw, 3.9rem); }
+    .vegas-date { margin-top: .85rem; font-size: .63rem; }
+    .board-shell__header { align-items: stretch; flex-direction: column; gap: .7rem; padding: 1rem 0 .8rem; }
+    .vegas-card-title p { font-size: .9rem; }
+    .vegas-letters { font-size: 1.35rem; }
+    .board-grid__cell { padding: .2rem .18rem; }
+    .celltext { font-size: clamp(.72rem, 2.9vw, .88rem); }
+    .vegas-star { width: 18px; height: 18px; }
+    .board-grid__cell--selected:not(.board-grid__cell--free)::after { inset: 3px 5px auto auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .particles-canvas, .particles-container { display: none; }
+  }
+}

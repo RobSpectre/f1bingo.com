@@ -1,7 +1,11 @@
 <template lang="pug">
 section.board-shell.surface-strong
+  VegasMasthead(v-if="vegas")
   .board-shell__header
-    .board-shell__masthead
+    .vegas-card-title(v-if='vegas')
+      h2 Your bingo card
+      p Tap events as they happen. Five in a line wins.
+    .board-shell__masthead(v-else)
       h1.board-shell__title Formula 1 Bingo
       .board-shell__event-row
         p.board-shell__event {{ game.event || cards.event }}
@@ -13,15 +17,22 @@ section.board-shell.surface-strong
       button.control-button.control-button--secondary(
         type='button'
         @click='resetBoard()'
-      ) Reset Grid
+      )
+        ArrowPathIcon.vegas-reset-icon(v-if='vegas' aria-hidden='true')
+        | Reset Grid
   SennaTribute(v-if='sennaTribute')
+  .vegas-letters(v-if='vegas' aria-hidden='true')
+    span(v-for="letter in 'BINGO'" :key='letter') {{ letter }}
   #board.board-grid
     div(v-for='cell in game.board' :key='cell.id' class='board-grid__cell-wrapper')
       button.board-grid__cell(
         @click.prevent='markSquare(cell.id)'
         :class="cellClasses(cell)"
+        :aria-pressed='cell.selected'
         :id="'square-' + cell.id"
       )
+        svg.vegas-star(v-if='vegas && cell.id === 13' viewBox='0 0 40 40' aria-hidden='true')
+          path(fill='currentColor' d='M20 0l2.6 13.8 8.2-5.1-5 8.4L40 20l-14.2 2.7 5 8.6-8.2-5.2L20 40l-2.7-13.9-8.3 5.2 5.2-8.6L0 20l14.2-2.9L9 8.7l8.3 5.1z')
         span.celltext(:class='cellTextClasses(cell)') {{ cell.text }}
         .particles-container.absolute.inset-0.pointer-events-none.overflow-hidden(v-if="particles[cell.id]")
           div(v-for="p in particles[cell.id]" :key="p.id" class="particle" :style="p.style")
@@ -39,7 +50,10 @@ section.board-shell.surface-strong
 </template>
 
 <script>
-import cards from '@/assets/data/deck.json'
+import currentDeck from '@/assets/data/deck.json'
+import sennaDeck from '@/tributes/senna-deck.json'
+import VegasMasthead from '@/components/VegasMasthead.vue'
+import { ArrowPathIcon } from '@heroicons/vue/24/outline'
 
 import ShareButton from '@/components/ShareButton.vue'
 import WinnerCard from '@/components/WinnerCard.vue'
@@ -47,7 +61,7 @@ import Particles from '@/components/Particles.vue'
 import SennaTribute from '@/components/SennaTribute.vue'
 import { isSennaTributeActive, TRIBUTE_SQUARE_TEXT, HELMET_COLORS } from '@/tributes/senna'
 
-import { boardStore } from '@/store/board'
+import { boardStore, sennaPreviewStore } from '@/store/board'
 
 const WIN_CONDITIONS = [
   [1, 2, 3, 4, 5],
@@ -76,17 +90,20 @@ export default {
     ShareButton,
     WinnerCard,
     Particles,
-    SennaTribute
+    SennaTribute,
+    VegasMasthead,
+    ArrowPathIcon
   },
   setup() {
-    const game = boardStore()
-
-    return { game, cards }
+    const previewSenna = new URLSearchParams(window.location.search).get('tribute') === 'senna'
+    const game = previewSenna ? sennaPreviewStore() : boardStore()
+    const sennaTribute = isSennaTributeActive(Date.now(), window.location.search)
+    const cards = sennaTribute ? sennaDeck : currentDeck
+    return { game, cards, sennaTribute, vegas: cards.theme === 'las-vegas' }
   },
   data () {
     return {
       particles: {},
-      sennaTribute: isSennaTributeActive(Date.now(), window.location.search),
       victorySoundPlayed: false
     }
   },
@@ -128,7 +145,7 @@ export default {
   },
   methods: {
     shouldRegenerateBoard () {
-      if (this.game.event !== cards.event || this.game.version !== cards.version) {
+      if (this.game.event !== this.cards.event || this.game.version !== this.cards.version) {
         return true
       }
 
@@ -261,7 +278,7 @@ export default {
       }, 400)
     },
     loadBoard () {
-      const deck = this.shuffle([...cards.squares])
+      const deck = this.shuffle([...this.cards.squares])
       let id = 1
       let deckIndex = 0
       const newBoard = []
@@ -277,8 +294,8 @@ export default {
         id++
       }
 
-      this.game.setEvent(cards.event)
-      this.game.setVersion(cards.version)
+      this.game.setEvent(this.cards.event)
+      this.game.setVersion(this.cards.version)
       this.game.resetBoard(newBoard)
     },
     shuffle (array) {
